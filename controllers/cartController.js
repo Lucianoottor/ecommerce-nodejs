@@ -37,20 +37,20 @@ class CartController {
     }
 
     // Method to remove an item from the cart
-    async removeItemFromCart(req, res) {
-      const { cartItemId } = req.body;
+    async removeItem(req, res) {
+      const { productId } = req.params;
       const userId = req.user.id;
       if (!userId) {
-        return res.status(400).json({ message: 'User ID not found in token' });
+          return res.status(400).json({ message: 'User ID not found in token' });
       }
       try {
-        await this.cartService.removeItemFromCart(userId, cartItemId);
+        await this.cartService.removeItem(userId, productId);
         return res.status(200).json({ message: 'Item removed from cart' });
       } catch (error) {
         return res.status(500).json({ message: error.message });
       }
-    }
   }
+}
   
   module.exports = CartController;
   

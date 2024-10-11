@@ -22,10 +22,6 @@ router.get('/getItems', auth.verifyToken, (req, res) => {
   cartController.getCartItems(req, res);
 });
 
-router.post('/removeItem', auth.verifyToken, (req, res) => {
-  cartController.removeItemFromCart(req, res);
-});
-
 router.delete('/remove/:productId', auth.verifyToken, async (req, res) => {
   cartController.removeItem(req, res);
 });
