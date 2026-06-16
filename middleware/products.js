@@ -1,6 +1,5 @@
-const { Sequelize } = require(".");
+const { Sequelize } = require("../models");
 
-// models/product.js
 module.exports = (sequelize, DataTypes) => {
     const Product = sequelize.define('Product', {
       productId:{
@@ -26,7 +25,6 @@ module.exports = (sequelize, DataTypes) => {
       }
     });
     Product.associate = (models) => {
-      // Um produto pode estar em vários itens de carrinhos diferentes
       Product.hasMany(models.CartItem, { foreignKey: 'productId', as: 'cartItems' });
     };
   

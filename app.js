@@ -32,14 +32,13 @@ async function applyDataStructure() {
 // Aplicando a estrutura de dados
 applyDataStructure();
 
-const PORT = process.env.PORT || 3000; // Changed from 8080 to 3000 to match Docker
-const HOST = '0.0.0.0';                // Forces the app to accept external container traffic
+const PORT = process.env.PORT || 3000; 
+const HOST = '0.0.0.0';             
 
 app.listen(PORT, HOST, () => {
     console.log(`Servidor rodando em http://${HOST}:${PORT}`);
 })
 
-// Middleware de tratamento de erros
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Algo deu errado!');

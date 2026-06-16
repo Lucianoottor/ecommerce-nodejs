@@ -3,7 +3,7 @@ const paymentService = new PaymentService(
   require('../models/transaction'),
   require('../models/cart'),
   require('../models/cartItem'),
-  require('../models/products')
+  require('../middleware/products')
 );
 
 module.exports = {

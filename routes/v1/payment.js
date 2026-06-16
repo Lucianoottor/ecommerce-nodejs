@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const paymentController = require('../controllers/paymentController');
+const paymentController = require('../../controllers/paymentController');
 
 // Rota para pagamento via cartão de crédito
 router.post('/credit-card', paymentController.processCreditCardPayment);
