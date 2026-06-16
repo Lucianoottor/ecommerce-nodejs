@@ -8,7 +8,7 @@ const paymentService = new PaymentService(
 
 module.exports = {
   async processCreditCardPayment(req, res) {
-    const { userId } = req.body; // userId enviado no corpo da requisição
+    const { userId } = req.body;
 
     try {
       const transaction = await paymentService.processCreditCardPayment(userId);

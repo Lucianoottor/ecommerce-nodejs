@@ -1,5 +1,5 @@
 // ./services/userService.js
-const auth = require('../auth');
+const auth = require('../middleware/auth');
 
 const db = require('../models');
 
@@ -23,7 +23,6 @@ class UserService{
         }
     }
 
-    //Método para retornar todos os usuários
     async findAll()
     {
         try{
@@ -36,7 +35,6 @@ class UserService{
 
     }
 
-    //Método para retornar o usuário pelo id
     async findById(id){
         try{
             const User = await this.User.findByPk(id);
@@ -48,7 +46,6 @@ class UserService{
 
     }
 
-    //Método para login
     async login(email, password){
         try{
             const User = await this.User.findOne({

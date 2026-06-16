@@ -1,35 +1,25 @@
-var express = require('express'); // Para as rotas
+var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const bodyParser = require('body-parser');
 
-// Importando o Sequelize
+
 const db = require('./models');
 
-var indexRouter = require('./routes/index'); // Rota principal
-var usersRouter = require('./routes/users'); // Rota de usuários
-var productsRouter = require('./routes/products'); // Rota de produtos
-var paymentRouter = require('./routes/payment'); // Rota de pagamento
-const cartRouter = require('./routes/cart'); // Rota do carrinho
+const v1IndexRouter = require('./routes/v1/index');
 
-var app = express(); // Ativa a API com o Express
+var app = express(); 
 
-// Middleware
 app.use(logger('dev'));
-app.use(express.json()); // Permite o uso de JSON
+app.use(express.json()); 
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Rotas
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/products', productsRouter);
-app.use('/cart', cartRouter);
-app.use('/payment', paymentRouter);
 
-// Função para sincronizar o banco de dados
+app.use('/api/v1', v1IndexRouter);
+
 async function applyDataStructure() {
     try {
         await db.sequelize.sync({ alter: true });
@@ -42,11 +32,12 @@ async function applyDataStructure() {
 // Aplicando a estrutura de dados
 applyDataStructure();
 
-// Iniciar o servidor
-const PORT = process.env.PORT || 8080; // Porta configurável
-app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
-});
+const PORT = process.env.PORT || 3000; // Changed from 8080 to 3000 to match Docker
+const HOST = '0.0.0.0';                // Forces the app to accept external container traffic
+
+app.listen(PORT, HOST, () => {
+    console.log(`Servidor rodando em http://${HOST}:${PORT}`);
+})
 
 // Middleware de tratamento de erros
 app.use((err, req, res, next) => {

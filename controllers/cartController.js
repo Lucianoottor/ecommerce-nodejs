@@ -4,7 +4,6 @@ class CartController {
       this.cartService = cartService;
     }
   
-    // Method to add an item to the cart
     async addItemToCart(req, res) {
       const { productId, quantity } = req.body;
       const userId = req.user.id;
@@ -22,7 +21,6 @@ class CartController {
       }
     }
 
-    // Method to get the cart items
     async getCartItems(req, res) {
       const userId = req.user.id;
       if (!userId) {

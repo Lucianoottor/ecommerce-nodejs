@@ -1,11 +1,8 @@
-// ./controllers/userController.js
-
 class UserController{
     constructor(UserService){
         this.userService = UserService;
     }
     async createUser(req,res){
-        //processar a request
         const {email, data_nasc, password} = req.body;
         try{
             const newUser = await this.userService.create(email, data_nasc, password);
@@ -32,7 +29,7 @@ class UserController{
     }
 
     async findUserById(req,res){
-        const {id} = req.query;
+        const {id} = req.params;
         try{
             const User = await this.userService.findById(id);
             res.status(200).json(User);
@@ -45,12 +42,10 @@ class UserController{
 
     }
 
-    //Método para login
     async login(req,res){
         const {email, password} = req.body;
         try{
             const User  = await this.userService.login(email, password);
-            //Atenção! Vai ter um problema de segurança
             res.status(200).json(User);
         }
         catch(error){
