@@ -2,7 +2,6 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const bodyParser = require('body-parser');
 
 
 const db = require('./models');
@@ -22,7 +21,7 @@ app.use('/api/v1', v1IndexRouter);
 
 async function applyDataStructure() {
     try {
-        await db.sequelize.sync({ alter: true });
+        await db.sequelize.sync({ alter: false });
         console.log('Banco de dados sincronizado');
     } catch (err) {
         console.error('Erro ao sincronizar o banco de dados:', err);

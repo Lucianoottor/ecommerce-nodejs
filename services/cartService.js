@@ -5,86 +5,48 @@ class CartService {
       this.CartItemModel = CartItemModel;
       this.ProductModel = ProductModel;
     }
-  
-    // Method to add a product to a user's cart
-    /*async addItemToCart(userId, productId, quantity = 1) {
+
+    async addItemToCart(userId, productId, quantity = 1) {
       try {
-        // Find the product to ensure it exists
         const product = await this.ProductModel.findByPk(productId);
         if (!product) {
-          throw new Error('Product not found');
+          throw new Error('Produto não encontrado');
         }
-  
-        // Find or create a cart for the user
+
+        if (product.estoque < quantity) {
+          throw new Error(`Quantidade solicitada (${quantity}) excede o estoque disponível (${product.estoque}).`);
+        }
+
         let cart = await this.CartModel.findOne({ where: { userId } });
         if (!cart) {
           cart = await this.CartModel.create({ userId });
         }
-  
-        // Check if the item is already in the cart
+
         let cartItem = await this.CartItemModel.findOne({
           where: { cartId: cart.cartId, productId },
         });
-  
+    
         if (cartItem) {
-          // Update the quantity if the item already exists
-          cartItem.quantity += quantity;
+          const newQuantity = cartItem.quantity + quantity;
+          if (product.estoque < newQuantity) {
+            throw new Error(`Quantidade total no carrinho (${newQuantity}) excede o estoque disponível (${product.estoque}).`);
+          }
+    
+          cartItem.quantity = newQuantity;
           await cartItem.save();
         } else {
-          // Add the item if it doesn't exist
           cartItem = await this.CartItemModel.create({
             cartId: cart.cartId,
             productId,
             quantity,
           });
         }
-  
+    
         return cartItem;
       } catch (error) {
         throw new Error(error.message);
       }
-    }*/
-      async addItemToCart(userId, productId, quantity = 1) {
-        try {
-          const product = await this.ProductModel.findByPk(productId);
-          if (!product) {
-            throw new Error('Produto não encontrado');
-          }
-
-          if (product.estoque < quantity) {
-            throw new Error(`Quantidade solicitada (${quantity}) excede o estoque disponível (${product.estoque}).`);
-          }
-
-          let cart = await this.CartModel.findOne({ where: { userId } });
-          if (!cart) {
-            cart = await this.CartModel.create({ userId });
-          }
-
-          let cartItem = await this.CartItemModel.findOne({
-            where: { cartId: cart.cartId, productId },
-          });
-      
-          if (cartItem) {
-            const newQuantity = cartItem.quantity + quantity;
-            if (product.estoque < newQuantity) {
-              throw new Error(`Quantidade total no carrinho (${newQuantity}) excede o estoque disponível (${product.estoque}).`);
-            }
-      
-            cartItem.quantity = newQuantity;
-            await cartItem.save();
-          } else {
-            cartItem = await this.CartItemModel.create({
-              cartId: cart.cartId,
-              productId,
-              quantity,
-            });
-          }
-      
-          return cartItem;
-        } catch (error) {
-          throw new Error(error.message);
-        }
-      }
+    }
       
     
     async getCartItems(userId) {
@@ -109,10 +71,15 @@ class CartService {
   }
 
   
-  async removeItem(cartItemId) {
-    try {
-     
-      let cartItem = await this.CartItemModel.findByPk(cartItemId);
+  async removeItem(userId, productId) {
+    try { 
+      let cart = await this.CartModel.findOne({
+          where: { userId }
+      });
+      if (!cart) { 
+        throw new Error("Cart doesn't exist") 
+      }
+      let cartItem = await this.CartItemModel.findOne({where: {cartId: cart.cartId, productId: productId}});
       
       if (!cartItem) {
         throw new Error('Item não encontrado no carrinho.');

@@ -1,31 +1,25 @@
-const PaymentService = require('../services/paymentService');
-const paymentService = new PaymentService(
-  require('../models/transaction'),
-  require('../models/cart'),
-  require('../models/cartItem'),
-  require('../middleware/products')
-);
+class PaymentController {
+  constructor(PaymentService) {
+    this.paymentService = PaymentService;
+  }
 
-module.exports = {
   async processCreditCardPayment(req, res) {
-    const { userId } = req.body;
-
     try {
-      const transaction = await paymentService.processCreditCardPayment(userId);
-      res.json(transaction);
-    } catch (error) {
-      res.status(400).json({ error: error.message });
-    }
-  },
-
-  async processPixPayment(req, res) {
-    const { userId } = req.body;
-
-    try {
-      const transaction = await paymentService.processPixPayment(userId);
+      const transaction = await this.paymentService.processCreditCardPayment(req.user.id);
       res.json(transaction);
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
   }
-};
+
+  async processPixPayment(req, res) {
+    try {
+      const transaction = await this.paymentService.processPixPayment(req.user.id);
+      res.json(transaction);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  }
+}
+
+module.exports = PaymentController;

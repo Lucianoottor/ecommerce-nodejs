@@ -7,9 +7,9 @@ class UserService {
         this.User = UserModel;
     }
 
-    async create(email, data_nasc, role, password) {
+    async create(email, data_nasc, password) {
         try {
-            const newUser = await this.User.create({ email, data_nasc, role, password });
+            const newUser = await this.User.create({ email, data_nasc, password });
             return newUser || null;
         } catch (error) {
             throw error;

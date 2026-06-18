@@ -1,11 +1,6 @@
 
 const { Cart } = require('../models');
-async function getCart(userId) {
-  const cart = await Cart.findOne({
-      where: { userId }
-  });
-  return cart;
-}
+
 class PaymentService {
     constructor(TransactionModel, CartModel, CartItemModel, ProductModel) {
         this.TransactionModel = TransactionModel;
@@ -14,8 +9,26 @@ class PaymentService {
         this.ProductModel = ProductModel;
     }
 
+    async getCart(userId) {
+        const cart = await Cart.findOne({
+            where: { userId },
+            include: [{
+              model: this.CartItemModel, 
+              as: 'items',              
+              include: [{
+                  model: this.ProductModel, 
+                  as: 'product'
+              }]
+          }]
+        });
+        return cart;
+    }
+
+
     async processCreditCardPayment(userId) {
-        const cart = await getCart(userId); 
+
+        
+        const cart = await this.getCart(userId); 
         if (!cart || !cart.items.length) {
             throw new Error('Carrinho vazio ou não encontrado.');
         }
@@ -56,7 +69,7 @@ class PaymentService {
 
     async processPixPayment(userId) {
 
-        const cart = await getCart(userId); 
+        const cart = await this.getCart(userId); 
 
         if (!cart || !cart.items.length) {
             throw new Error('Carrinho vazio ou não encontrado.');

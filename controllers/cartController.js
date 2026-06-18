@@ -34,7 +34,6 @@ class CartController {
       }
     }
 
-    // Method to remove an item from the cart
     async removeItem(req, res) {
       const { productId } = req.params;
       const userId = req.user.id;

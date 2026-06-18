@@ -3,9 +3,9 @@ class UserController{
         this.userService = UserService;
     }
     async createUser(req,res){
-        const {email, data_nasc, role, password} = req.body;
+        const {email, data_nasc, password} = req.body;
         try{
-            const newUser = await this.userService.create(email, data_nasc, role, password);
+            const newUser = await this.userService.create(email, data_nasc, password);
             res.status(201).json(newUser);
         }
         catch(error){
