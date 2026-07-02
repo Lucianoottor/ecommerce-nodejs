@@ -1,6 +1,6 @@
 # E-commerce Fullstack
 
-Access the project here: [Ecommerce Website](https://ecommerce-nodejs-75ce.onrender.com/products)
+Access the project here: [Ecommerce Website](https://ecommerce-nodejs-75ce.onrender.com/products)\
 Obs: it's hosted on free-tier Render so it might be "sleeping" when accessed. Please refresh the page after loading.
 
 ## Architecture
