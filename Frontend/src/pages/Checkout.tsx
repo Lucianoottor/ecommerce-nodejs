@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { useCart } from '../hooks/useCart';
@@ -14,6 +14,7 @@ export default function Checkout() {
   const [paymentMethod, setPaymentMethod] = useState('pix');
   const [loading, setLoading] = useState(false);
   const [confirmation, setConfirmation] = useState<Transaction | null>(null);
+  const cartSyncedRef = useRef(false);
 
   if (items.length === 0 && !confirmation) {
     navigate('/cart');
@@ -45,12 +46,16 @@ export default function Checkout() {
   const handlePlaceOrder = async () => {
     setLoading(true);
     try {
-      // First sync cart items to backend
-      for (const item of items) {
-        await api.post('/cart/addItem', {
-          productId: item.product.productId,
-          quantity: item.quantity,
-        });
+      // Sync cart items to backend only once per checkout session —
+      // retrying a failed payment must not re-add quantities on top of what's already there.
+      if (!cartSyncedRef.current) {
+        for (const item of items) {
+          await api.post('/cart/addItem', {
+            productId: item.product.productId,
+            quantity: item.quantity,
+          });
+        }
+        cartSyncedRef.current = true;
       }
 
       const endpoint = paymentMethod === 'pix' ? '/payment/pix' : '/payment/credit-card';
