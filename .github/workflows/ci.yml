@@ -16,10 +16,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: npm
-          cache-dependency-path: Backend/package-lock.json
-      - run: npm ci
+          node-version: 22
+      - run: npm install
       - run: npm test
 
   frontend-tests:
@@ -31,9 +29,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: npm
-          cache-dependency-path: Frontend/package-lock.json
-      - run: npm ci
+          node-version: 22
+      - run: npm install
       - run: npm run build
       - run: npm test
