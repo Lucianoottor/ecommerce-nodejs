@@ -1,6 +1,6 @@
 # E-commerce Fullstack
 
-Fullstack project: A marketplace with PERN stack.
+Access the project here: [Link Text](https://ecommerce-nodejs-75ce.onrender.com/products)
 
 ## Architecture
 
