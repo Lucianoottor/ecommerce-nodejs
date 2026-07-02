@@ -27,19 +27,22 @@ class PaymentService {
             throw new Error('Cart is empty or not found');
         }
 
+        let totalAmount = 0;
+        cart.items.forEach(item => {
+            totalAmount += item.quantity * item.product.price;
+        });
+
         const status = Math.random() > 0.5 ? 'completed' : 'failed';
 
         if (status === 'failed') {
+            await this.TransactionModel.create({
+                userId, totalAmount, paymentMethod: 'credit_card', status
+            });
             throw new Error('Payment processing failed');
         }
 
         const { sequelize } = this.CartModel;
         return await sequelize.transaction(async (t) => {
-            let totalAmount = 0;
-            cart.items.forEach(item => {
-                totalAmount += item.quantity * item.product.price;
-            });
-
             for (const item of cart.items) {
                 const product = item.product;
                 if (product.stock < item.quantity) {
