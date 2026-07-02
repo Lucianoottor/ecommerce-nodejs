@@ -1,4 +1,6 @@
 require('dotenv').config();
+const fs = require('fs');
+const path = require('path');
 
 module.exports = {
   "development": {
@@ -24,7 +26,8 @@ module.exports = {
     "dialectOptions": {
       "ssl": {
         "require": true,
-        "rejectUnauthorized": true
+        "rejectUnauthorized": true,
+        "ca": fs.readFileSync(path.join(__dirname, "../certs/rds-global-bundle.pem")).toString()
       }
     }
   }
