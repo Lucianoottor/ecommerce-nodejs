@@ -1,6 +1,6 @@
 # E-commerce Fullstack
 
-Access the project here: [Link Text](https://ecommerce-nodejs-75ce.onrender.com/products)
+Access the project here: [Ecommerce Website](https://ecommerce-nodejs-75ce.onrender.com/products)
 
 ## Architecture
 
